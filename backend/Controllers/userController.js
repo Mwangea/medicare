@@ -1,5 +1,4 @@
 
-
 import User from '../models/UserSchema.js';
 
 export const updateUser = async(req, res) =>{
