@@ -41,10 +41,10 @@ export const restrict = roles=> async (req, res, next) =>{
     const doctor = await Doctor.findById(userId)
 
     if(patient){
-        user = patient
+        user = patient;
     }
     if(doctor){
-        user = doctor
+        user = doctor;
     }
 
     if(!roles.includes(user.role)){
