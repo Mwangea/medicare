@@ -60,6 +60,6 @@ reviewSchema.statics.calcAverageRatings = async function(doctorId){
 
 reviewSchema.post('save', function(){
   this.constructor.calcAverageRatings(this.doctor)
-})
+});
 
 export default mongoose.model("Review", reviewSchema);

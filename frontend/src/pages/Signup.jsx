@@ -2,6 +2,7 @@ import signupImg from '../assets/images/signup.gif';
 import avatar from '../assets/images/doctor-img01.png';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
+import uploadImageToCloudinary from '../utils/uploadCloudinary';
 
 const Signup = () => {
   
@@ -24,14 +25,20 @@ const Signup = () => {
   const handleFileInputChange = async (event) =>{
 
     const file = event.target.files[0]
+
+    const data = await uploadImageToCloudinary(file);
+
+    console.log(data);
   // later we will use cloudinary to upload images
     {/* console.log(file) */}
   }
 
   const submitHandler = async event=>{
+
+    console.log(formData);
     event.preventDefault();
     
-  }
+  };
 
   return (
     <section className='px-5 xl:px-0'>
