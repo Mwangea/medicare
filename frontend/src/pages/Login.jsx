@@ -1,16 +1,68 @@
-import { useState } from "react";
-import { Link } from 'react-router-dom';
+import { useState, useContext } from "react";
+import { Link, useNavigate} from 'react-router-dom';
+import {BASE_URL } from '../../config';
+import {toast} from 'react-toastify';
+import { AuthContext } from "../context/AuthContext.jsx";
+import HashLoader from "react-spinners/HashLoader";
 
 const Login = () => {
 
   const [formData, setFormData] = useState({
     email:'',
     password:''
-  })
+  });
+
+  const [loading, setLoading] = useState(false);
+
+  const navigate = useNavigate();
+  const {dispatch} = useContext(AuthContext);
+
 
   const handleInputChange = e => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
-  }
+  };
+
+  const submitHandler = async event=>{
+
+    
+    event.preventDefault();
+    setLoading(true)
+
+    try {
+      const res = await fetch(`${BASE_URL}/auth/login`, {
+        method: 'post',
+        headers: {
+          'content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      });
+
+      const result = await res.json()
+
+      if(!res.ok){
+        throw new Error(result.message)
+      }
+
+      dispatch({
+        type: "LOGIN_SUCCESS",
+        payload: {
+          user:result.data,
+          token:result.token,
+          role:result.role,
+        },
+      });
+
+      console.log(result, "login data")
+
+      setLoading(false);
+      toast.success(result.message);
+      navigate('/home')
+    } catch (err) {
+      toast.error(err.message)
+      setLoading(false)
+    }
+    
+  };
 
   return (
     <section className="px-5 lg:px-0">
@@ -18,7 +70,7 @@ const Login = () => {
         <h3 className="text-headingColor text-[22px] text-center leading-9 font-bold mb-7"> {/* Adjusted margin here */}
           Hello! <span className="text-primaryColor">Welcome</span> Back
         </h3>
-        <form className="py-2 md:py-0">
+        <form className="py-2 md:py-0" onSubmit={submitHandler}>
           <div className="mb-3"> {/* Adjusted margin here */}
             <input type="email"
               placeholder="Enter Your Email"
@@ -44,8 +96,9 @@ const Login = () => {
           <div className="mt-4"> {/* Adjusted margin here */}
             <button
               type="submit"
-              className="w-full bg-primaryColor text-white text-[18px] leading-30px rounded-lg px-4 py-2"> {/* Adjusted padding and height here */}
-              Login
+              className="w-full bg-primaryColor text-white text-[18px] leading-30px rounded-lg px-4 py-2">
+               {/* Adjusted padding and height here */}
+              { loading ? <HashLoader size={25} color="#ffff"/> : 'login'}
             </button>
           </div>
           <p className="mt-4 text-textColor text-center"> {/* Adjusted margin here */}
