@@ -1,7 +1,7 @@
 
 import User from '../models/UserSchema.js';
-import BookingSchema from '../models/BookingSchema.js';
-import DoctorSchema from "../models/DoctorSchema.js";
+import Booking from '../models/BookingSchema.js';
+import Doctor from "../models/DoctorSchema.js";
 
 export const updateUser = async(req, res) =>{
     const id = req.params.id
@@ -96,7 +96,7 @@ export const getMyAppointments = async(req,res) => {
         const doctorIds = bookings.map(el=>el.doctor.id)
 
         // step -3 : retrieve doctors using doctor ids 
-        const doctors = await doctor.find({_id: {$in:doctorIds}}).select('-password')
+        const doctors = await Doctor.find({_id: {$in:doctorIds}}).select('-password')
 
         res.status(200).json({success:true, message:"Appointments are getting ", data:doctors})
 
