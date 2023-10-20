@@ -1,14 +1,14 @@
-import signupImg from '../assets/images/signup.gif';
-//import avatar from '../assets/images/doctor-img01.png';
-import { Link, useNavigate } from 'react-router-dom';
+
+
+import {  useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import uploadImageToCloudinary from '../utils/uploadCloudinary';
-import { BASE_URL } from '../config';
+import uploadImageToCloudinary from '../../utils/uploadCloudinary';
+import { BASE_URL } from '../../config';
 import {toast} from 'react-toastify'
 import HashLoader from 'react-spinners/HashLoader';
 
-const Signup = () => {
-  
+const Profile = () => {
+
   const [selectedFile, setSelectedFile] = useState(null);
   const [previewURL, setPreviewURL] = useState('');
   const [loading, setLoading] = useState(false);
@@ -69,24 +69,11 @@ const Signup = () => {
       toast.error(err.message)
       setLoading(false)
     }
-    
-  };
 
+  };  
   return (
-    <section className='px-5 xl:px-0'>
-      <div className='max-w-[1170px] mx-auto'>
-        <div className='grid grid-cols-1 lg:grid-cols-2 '> {/* Added 'gap-6' to create space */}
-          {/* Image box */}
-          <div className='hidden lg:block bg-primaryColor rounded-l-lg' style={{ width: '400px', height: '300px' }}>
-            <figure className='rounded-l-lg'>
-               <img src={signupImg} alt='' className='w-full h-full rounded-l-lg'/>
-            </figure>
-          </div>
-          {/* SIGN UP FORM */}
-          <div className="rounded-l-lg lg:pl-16 py-1">
-            <h3 className="text-headingColor text-[22px] leading-9 font-bold mb-10">Create an <span className='text-primaryColor'>account</span></h3>
-            {/* Your signup form content here */}
-          <form onSubmit={submitHandler}>
+    <div>
+      <form onSubmit={submitHandler}>
           <div className="mb-1"> {/* Adjusted margin here */}
             <input type="text"
               placeholder="Full Name"
@@ -185,15 +172,9 @@ const Signup = () => {
               { loading ? <HashLoader size={35} color="#ffffff"/> : 'Sign Up'}
             </button>
           </div>
-          <p className="mt-3 text-textColor text-center"> {/* Adjusted margin here */}
-            Already have an account? <Link to='/login' className="text-primaryColor font-medium ml-1">Login</Link>
-          </p>
            </form>
-          </div>
-        </div>
-      </div>
-    </section>
+    </div>
   )
-};
+}
 
-export default Signup;
+export default Profile

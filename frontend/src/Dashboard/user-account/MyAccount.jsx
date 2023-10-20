@@ -1,18 +1,39 @@
 import { useContext, useState } from 'react';
+
 import userImg from "../../assets/images/doctor-img01.png";
 import { AuthContext } from '../../context/AuthContext';
+
+import MyBookings from './MyBookings';
+import Profile from './Profile';
+
+import useGetProfile from '../../hooks/useFetchData';
+import { BASE_URL } from '../../config';
+
+import Loading from '../../components/loader/Loading';
+import Error from '../../components/Error/Error';
+
 
 const MyAccount = () => {
 
     const {dispatch} = useContext(AuthContext);
     const [tab,setTab] = useState('bookings')
+    
+    const {data:userData, loading, error} = useGetProfile(`${BASE_URL}/users/profile/me`)
 
+    console.log(userData, 'userdata');
     const handleLogout = () => {
         dispatch({type: 'LOGOUT'});
     }
   return (
-    <div className='max-w-[1170px] px-5 mx-auto'>
-        <div className='grid md:grid-cols-3 gap-10'>
+    <section>
+        <div className='max-w-[1170px] px-5 mx-auto'>
+
+        {loading && !error && <Loading />}
+
+        {error && !loading && <Error errMessage={error}/>}
+
+        {!loading && !error && (
+            <div className='grid md:grid-cols-3 gap-10'>
             <div className='pb-[50px] px-[30px] rounded-md'>
                 <div className='flex items-center justify-center'>
                     <figure className='w-[100px] h-[100px] rounded-full border-2 border-solid border-primaryColor'>
@@ -49,10 +70,20 @@ const MyAccount = () => {
                     className={` ${tab === 'settings' && 'bg-primaryColor text-white font-normal' }py-2 px-5 rounded-md text-headingColor font-semibold text-[16px]
                     leading-7 border border-solid border-primaryColor`}>Profile Settings</button>
                 </div>
+
+                {
+                    tab === 'bookings' && <MyBookings />
+                },
+                {
+                    tab === 'settings' && <Profile />
+                }
             </div>
         </div>
+            )
+        }
     </div>
-  )
+    </section>
+  );
 }
 
 export default MyAccount;
